@@ -1,3 +1,7 @@
+# Editor Files
+.*.sw[mnop]
+tags
+
 # Prerequisites
 *.d
 
