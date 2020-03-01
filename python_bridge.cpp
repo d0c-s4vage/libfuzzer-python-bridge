@@ -203,10 +203,11 @@ static void LLVMFuzzerFinalizePythonModule() {
   Py_Finalize();
 }
 
-extern "C" void LLVMFuzzerCustomLoop(void(*DoCoreLoop)(void *F_),
-                                     bool(*DoRunOne)(void *F_, const uint8_t *Data, size_t Size),
-                                     void *F_,
-                                     fuzzer::Vector<fuzzer::SizedFile> &CorporaFiles) {
+extern "C"
+void LLVMFuzzerCustomLoop(void(*DoCoreLoop)(void *F_),
+                          bool(*DoRunOne)(void *F_, const uint8_t *Data, size_t Size),
+                          void *F_,
+                          fuzzer::Vector<fuzzer::SizedFile> &CorporaFiles) {
   FUZZER_ = F_;
   FUZZER_DoRunOne = DoRunOne;
 
@@ -239,6 +240,8 @@ extern "C" void LLVMFuzzerCustomLoop(void(*DoCoreLoop)(void *F_),
 
   PyObject *py_value;
   py_value = PyObject_CallObject(py_functions[PY_FUNC_CUSTOM_LOOP], py_args);
+  if (PyErr_Occurred())
+    PyErr_Print();
 
   Py_DECREF(corpora_files);
 
